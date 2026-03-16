@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+      contents: read
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Required for Nerdbank.GitVersioning
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.x
+
+      - uses: dotnet/nbgv@v0.5
+        id: nbgv
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release /p:ContinuousIntegrationBuild=true
+
+      # https://tunit.dev/docs/guides/html-report/#enabling-automatic-artifact-upload
+      - name: Expose GitHub Actions Runtime
+        uses: actions/github-script@v8
+        with:
+          script: |
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN']);
+            core.exportVariable('ACTIONS_RESULTS_URL', process.env['ACTIONS_RESULTS_URL']);
+
+      - name: Test
+        # --no-build leads to empty coverage
+        run: dotnet test -c Release --coverage --coverage-output cobertura.xml --coverage-output-format cobertura --results-directory .
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Pack
+        run: dotnet pack src/TUnit.PairwiseDataSource -c Release -o ./artifacts /p:ContinuousIntegrationBuild=true
+
+      - name: Upload NuGet package
+        id: upload
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-package
+          path: |
+            ./artifacts/*.nupkg
+            ./artifacts/*.snupkg
+
+      - uses: actions/attest-build-provenance@v4
+        with:
+          subject-name: nuget-package
+          subject-digest: sha256:${{ steps.upload.outputs.artifact-digest }}
