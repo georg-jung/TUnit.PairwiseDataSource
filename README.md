@@ -6,12 +6,12 @@ A [TUnit](https://tunit.dev) plugin that provides pairwise (all-pairs) test case
 
 Research shows most software defects are triggered by interactions between at most two parameters. Pairwise testing exploits this by covering all two-way interactions with significantly fewer test cases:
 
-| Parameters | Values each | Cartesian product | Pairwise (approx.)  |
-|------------|-------------|-------------------|---------------------|
-| 3          | 3           | 27                | ~9                  |
-| 4          | 3           | 81                | ~9-12               |
-| 5          | 3           | 243               | ~15-18              |
-| 3 bools    | 2           | 8                 | 4                   |
+| Parameters | Values each | Cartesian product | Pairwise |
+|------------|-------------|-------------------|----------|
+| 3          | 3           | 27                | 9        |
+| 4          | 3           | 81                | 9        |
+| 5          | 3           | 243               | 15       |
+| 3 bools    | 2           | 8                 | 4        |
 
 ## Installation
 
@@ -32,7 +32,7 @@ public async Task MyTest(
     [Matrix("+", "-")] string op,
     [Matrix("x", "y")] string second)
 {
-    // Generates ~6 test cases covering all pairs, instead of 12 (3×2×2) combinations
+    // Generates 6 test cases covering all pairs, instead of 12 (3×2×2) combinations
 }
 ```
 
