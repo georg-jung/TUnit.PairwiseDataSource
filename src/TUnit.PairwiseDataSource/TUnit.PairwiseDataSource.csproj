@@ -2,8 +2,29 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Description>Pairwise (all-pairs) test data source for TUnit. Generates test cases covering all pairwise parameter combinations with significantly fewer tests than full Cartesian product.</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TUnit.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../TUnit.PairwiseDataSource.Analyzers/TUnit.PairwiseDataSource.Analyzers.csproj"
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TUnit.PairwiseDataSource.Tests" />
+  </ItemGroup>
+
+  <!-- Include analyzer in NuGet package -->
+  <ItemGroup>
+    <None Include="$(OutputPath)\..\netstandard2.0\TUnit.PairwiseDataSource.Analyzers.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+  </ItemGroup>
 
 </Project>
