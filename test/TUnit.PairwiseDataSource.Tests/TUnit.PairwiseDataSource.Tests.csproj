@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <!-- TUnit0049 doesn't know about [PairwiseDataSource]; PWTUNIT001 replaces it. -->
+    <NoWarn>$(NoWarn);TUnit0049</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="GitHubActionsTestLogger" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/TUnit.PairwiseDataSource/TUnit.PairwiseDataSource.csproj" />
+    <ProjectReference Include="../../src/TUnit.PairwiseDataSource.Analyzers/TUnit.PairwiseDataSource.Analyzers.csproj"
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
+
+</Project>

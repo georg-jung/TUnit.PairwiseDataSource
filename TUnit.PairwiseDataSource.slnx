@@ -1,3 +1,5 @@
 <Solution>
   <Project Path="src/TUnit.PairwiseDataSource/TUnit.PairwiseDataSource.csproj" />
+  <Project Path="src/TUnit.PairwiseDataSource.Analyzers/TUnit.PairwiseDataSource.Analyzers.csproj" />
+  <Project Path="test/TUnit.PairwiseDataSource.Tests/TUnit.PairwiseDataSource.Tests.csproj" />
 </Solution>
