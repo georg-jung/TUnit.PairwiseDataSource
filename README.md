@@ -122,6 +122,6 @@ The pairwise test case generation algorithm is based on the implementation by [A
 
 ## License
 
-MIT - see [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
-The pairwise algorithm implementation is licensed under the Ms-PL / MIT license from the original authors (Charlie Poole, Andrew Arnott).
+The pairwise algorithm implementation (`PairwiseStrategy.cs`) is derived from [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial) by Andrew Arnott (itself based on Charlie Poole's NUnit implementation) and is licensed under the [Microsoft Public License (Ms-PL)](https://opensource.org/licenses/ms-pl). See [ThirdPartyNotices.txt](ThirdPartyNotices.txt) for the full license text.

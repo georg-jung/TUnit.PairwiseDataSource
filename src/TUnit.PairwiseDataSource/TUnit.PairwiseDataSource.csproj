@@ -27,4 +27,12 @@
           Visible="false" />
   </ItemGroup>
 
+  <!-- Include third-party license notices in NuGet package -->
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\..\..\ThirdPartyNotices.txt"
+          Pack="true"
+          PackagePath=""
+          Visible="false" />
+  </ItemGroup>
+
 </Project>
