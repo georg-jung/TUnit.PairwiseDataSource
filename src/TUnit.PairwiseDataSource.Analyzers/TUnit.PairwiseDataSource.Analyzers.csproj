@@ -5,6 +5,10 @@
     <IsRoslynComponent>true</IsRoslynComponent>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <NoWarn>$(NoWarn);RS2008</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <DevelopmentDependency>false</DevelopmentDependency>
+    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

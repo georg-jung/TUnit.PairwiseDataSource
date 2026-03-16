@@ -21,7 +21,7 @@
 
   <!-- Include analyzer in NuGet package -->
   <ItemGroup>
-    <None Include="$(OutputPath)\..\netstandard2.0\TUnit.PairwiseDataSource.Analyzers.dll"
+    <None Include="$(MSBuildProjectDirectory)\..\TUnit.PairwiseDataSource.Analyzers\bin\$(Configuration)\netstandard2.0\TUnit.PairwiseDataSource.Analyzers.dll"
           Pack="true"
           PackagePath="analyzers/dotnet/cs"
           Visible="false" />
