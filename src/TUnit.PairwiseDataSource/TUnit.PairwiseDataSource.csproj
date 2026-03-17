@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks> <!-- https://tunit.dev/docs/extending/libraries/ -->
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks> <!-- https://tunit.dev/docs/extending/libraries/ -->
     <Description>Pairwise (all-pairs) test data source for TUnit. Generates test cases covering all pairwise parameter combinations with significantly fewer tests than full Cartesian product.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

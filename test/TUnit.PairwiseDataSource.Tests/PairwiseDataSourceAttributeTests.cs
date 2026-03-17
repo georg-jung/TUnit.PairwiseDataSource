@@ -54,6 +54,15 @@ public class PairwiseDataSourceAttributeTests
 
     [Test]
     [PairwiseDataSource]
+    [MatrixExclusion(Color.Green, true)]
+    public async Task EnumAutoGeneration_WithEnumExclusion(Color color, bool flag)
+    {
+        await Assert.That(Enum.IsDefined(color)).IsTrue();
+        await Assert.That(color == Color.Green && flag).IsFalse();
+    }
+
+    [Test]
+    [PairwiseDataSource]
     [MatrixExclusion("a", "+", "x")]
     public async Task WithExclusion(
         [Matrix("a", "b", "c")] string a,

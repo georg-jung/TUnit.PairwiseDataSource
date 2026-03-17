@@ -230,8 +230,7 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
 
         if (resolvedType.IsEnum)
         {
-            var enumValues = Enum.GetValuesAsUnderlyingType(resolvedType)
-                                 .Cast<object?>();
+            var enumValues = GetEnumValuesAsUnderlyingType(resolvedType);
 
             if (isNullable)
             {
@@ -243,11 +242,23 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
             }
 
             return enumValues
-               .Except(matrixAttribute?.Excluding?.Select(e => Convert.ChangeType(e, Enum.GetUnderlyingType(resolvedType))) ?? [])
+                .Except(matrixAttribute?.Excluding?.Select(e => Convert.ChangeType(e, Enum.GetUnderlyingType(resolvedType))) ?? [])
                 .ToArray();
         }
 
         throw new ArgumentNullException($"No MatrixAttribute found for parameter '{sourceGeneratedParameterInformation.Name}' and the parameter type '{resolvedType.Name}' cannot be auto-generated. Only bool and enum types support auto-generation.");
+    }
+
+    private static IEnumerable<object?> GetEnumValuesAsUnderlyingType(Type resolvedType)
+    {
+#if NET5_0_OR_GREATER
+        return Enum.GetValuesAsUnderlyingType(resolvedType).Cast<object?>();
+#else
+        var underlyingType = Enum.GetUnderlyingType(resolvedType);
+        return Enum.GetValues(resolvedType)
+            .Cast<object>()
+            .Select(value => Convert.ChangeType(value, underlyingType));
+#endif
     }
 
     private static readonly IEnumerable<IEnumerable<object?>> Seed = [[]];
