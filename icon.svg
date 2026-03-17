@@ -1,0 +1,36 @@
+<svg width="36px" height="36px" viewBox="86 106 340 340" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="tGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8540F5" />
+            <stop offset="100%" stop-color="#512BD4" />
+        </linearGradient>        
+        <linearGradient id="pairGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00D4FF" />
+            <stop offset="100%" stop-color="#512BD4" />
+        </linearGradient>        
+        <linearGradient id="pairGradRight" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#00D4FF" />
+            <stop offset="100%" stop-color="#512BD4" />
+        </linearGradient>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.35" />
+        </filter>
+    </defs>
+
+    <g filter="url(#shadow)">
+        <path d="M 136 156 Q 136 276 256 276" fill="none" stroke="url(#pairGradLeft)" stroke-width="14" stroke-linecap="round" opacity="0.85"/>        
+        <path d="M 376 156 Q 376 276 256 276" fill="none" stroke="url(#pairGradRight)" stroke-width="14" stroke-linecap="round" opacity="0.85"/>        
+        <path d="M 136 156 C 136 320, 200 396, 256 396" fill="none" stroke="url(#pairGradLeft)" stroke-width="14" stroke-linecap="round" opacity="0.6"/>        
+        <path d="M 376 156 C 376 320, 312 396, 256 396" fill="none" stroke="url(#pairGradRight)" stroke-width="14" stroke-linecap="round" opacity="0.6"/>
+    </g>
+
+    <path d="M 136 156 L 376 156 M 256 156 L 256 396" fill="none" stroke="url(#tGrad)" stroke-width="38" stroke-linecap="round" filter="url(#shadow)"/>
+
+    <g filter="url(#shadow)">
+        <circle cx="136" cy="156" r="26" fill="#00D4FF" stroke="#512BD4" stroke-width="10" />        
+        <circle cx="376" cy="156" r="26" fill="#00D4FF" stroke="#512BD4" stroke-width="10" />        
+        <circle cx="256" cy="156" r="30" fill="#00D4FF" stroke="#512BD4" stroke-width="10" />        
+        <circle cx="256" cy="276" r="26" fill="#00D4FF" stroke="#512BD4" stroke-width="10" />        
+        <circle cx="256" cy="396" r="26" fill="#00D4FF" stroke="#512BD4" stroke-width="10" />
+    </g>
+</svg>

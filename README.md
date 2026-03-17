@@ -1,4 +1,6 @@
-# TUnit.PairwiseDataSource
+# ![TUnit.PairwiseDataSource Icon](https://raw.githubusercontent.com/georg-jung/TUnit.PairwiseDataSource/master/icon.svg) TUnit.PairwiseDataSource
+
+[![Build Status](https://github.com/georg-jung/TUnit.PairwiseDataSource/actions/workflows/ci.yml/badge.svg)](https://github.com/georg-jung/TUnit.PairwiseDataSource/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/georg-jung/TUnit.PairwiseDataSource/graph/badge.svg)](https://app.codecov.io/gh/georg-jung/TUnit.PairwiseDataSource)
 
 A [TUnit](https://tunit.dev) plugin that provides pairwise (all-pairs) test case generation. Instead of testing every possible combination of parameter values (Cartesian product), pairwise testing generates a smaller set of test cases that covers every pair of parameter values at least once.
 
