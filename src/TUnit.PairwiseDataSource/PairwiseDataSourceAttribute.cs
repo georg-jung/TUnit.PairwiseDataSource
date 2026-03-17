@@ -1,4 +1,3 @@
-using TUnit.Core;
 using TUnit.Core.Enums;
 using TUnit.Core.Extensions;
 
@@ -143,11 +142,10 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
 
     private static object?[][] GetExclusions(IEnumerable<Attribute> attributes)
     {
-        return attributes
+        return [.. attributes
             .Where(x => x is MatrixExclusionAttribute)
             .Cast<MatrixExclusionAttribute>()
-            .Select(x => x.Objects)
-            .ToArray();
+            .Select(x => x.Objects)];
     }
 
     private static IReadOnlyList<object?> GetAllArguments(
@@ -197,7 +195,7 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
         if (matrixAttribute is not null && objects is { Length: > 0 })
         {
             return matrixAttribute.Excluding is not null
-                       ? objects.Except(matrixAttribute.Excluding).ToArray()
+                       ? [.. objects.Except(matrixAttribute.Excluding)]
                        : objects;
         }
 
@@ -241,9 +239,7 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
                 }
             }
 
-            return enumValues
-                .Except(matrixAttribute?.Excluding?.Select(e => Convert.ChangeType(e, Enum.GetUnderlyingType(resolvedType))) ?? [])
-                .ToArray();
+            return [.. enumValues.Except(matrixAttribute?.Excluding?.Select(e => Convert.ChangeType(e, Enum.GetUnderlyingType(resolvedType))) ?? [])];
         }
 
         throw new ArgumentNullException($"No MatrixAttribute found for parameter '{sourceGeneratedParameterInformation.Name}' and the parameter type '{resolvedType.Name}' cannot be auto-generated. Only bool and enum types support auto-generation.");
