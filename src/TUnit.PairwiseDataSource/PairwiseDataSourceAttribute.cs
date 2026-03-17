@@ -258,9 +258,10 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
     /// </remarks>
     private static IEnumerable<object?> GetEnumValuesAsUnderlyingType(Type resolvedType)
     {
-#if NET5_0_OR_GREATER
+#if NET7_0_OR_GREATER
         return Enum.GetValuesAsUnderlyingType(resolvedType).Cast<object?>();
 #else
+        // see also https://github.com/SimonCropp/Polyfill/blob/18243e7e051c347acf023978bd18abd181ea6695/src/Polyfill/EnumPolyfill.cs#L51
         var underlyingType = Enum.GetUnderlyingType(resolvedType);
         return Enum.GetValues(resolvedType)
             .Cast<object>()
