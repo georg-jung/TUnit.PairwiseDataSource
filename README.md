@@ -2,6 +2,8 @@
 
 A [TUnit](https://tunit.dev) plugin that provides pairwise (all-pairs) test case generation. Instead of testing every possible combination of parameter values (Cartesian product), pairwise testing generates a smaller set of test cases that covers every pair of parameter values at least once.
 
+This project is closely based on [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial) by Andrew Arnott. In particular, the harder parts of the pairwise generation logic are intentionally kept very close to that codebase rather than being a fresh reimplementation. That close ancestry is deliberate: one goal of this package is to make xUnit to TUnit migration easier, including preserving the same generated pairwise cases for equivalent inputs.
+
 ## Why pairwise?
 
 Research shows most software defects are triggered by interactions between at most two parameters. Pairwise testing exploits this by covering all two-way interactions with significantly fewer test cases:
@@ -68,7 +70,9 @@ public async Task MyTest(
 
 ## Migrating from Xunit.Combinatorial
 
-If you're migrating from xUnit with [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial), the mapping is straightforward:
+If you're migrating from xUnit with [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial), the mapping is straightforward.
+
+That migration story is not accidental. This package is deliberately built on the same underlying approach, and the pairwise strategy was ported closely enough that equivalent inputs produce the same pair sets. In practice, that means moving from xUnit to TUnit does not also force you to absorb a silent change in generated test cases.
 
 | Xunit.Combinatorial | TUnit + PairwiseDataSource |
 | -------------------------------------- | ------------------------------------------- |
@@ -118,7 +122,11 @@ This package ships a **replacement analyzer** (`PWTUNIT001`) that provides equiv
 
 ## Algorithm
 
-The pairwise test case generation algorithm is based on the implementation by [Andrew Arnott](https://github.com/AArnott/Xunit.Combinatorial) (Xunit.Combinatorial), which is itself derived from [Charlie Poole's NUnit implementation](https://github.com/nunit/nunit), originally based on Bob Jenkins' ["jenny" tool](http://burtleburtle.net/bob/math/jenny.html).
+The pairwise test case generation algorithm in this repository is not merely inspired by [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial). [PairwiseStrategy.cs](src/TUnit.PairwiseDataSource/PairwiseStrategy.cs) is a close port of Andrew Arnott's implementation, preserving its behavior intentionally so that migrations can keep the exact same pairwise coverage.
+
+That implementation in Xunit.Combinatorial is itself derived from [Charlie Poole's NUnit implementation](https://github.com/nunit/nunit), originally based on Bob Jenkins' ["jenny" tool](http://burtleburtle.net/bob/math/jenny.html).
+
+Xunit.Combinatorial is an excellent project, and this package benefits directly from that work. The goal here is not to obscure that lineage, but to bring the same proven pairwise behavior into TUnit with an API that fits naturally alongside `[MatrixDataSource]`.
 
 ## License
 
