@@ -67,7 +67,8 @@ jobs:
       - name: Push to GitHub Packages
         run: dotnet nuget push ./artifacts/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
 
-      - uses: actions/attest-build-provenance@v4
+      - uses: actions/attest@v4
         with:
-          subject-name: nuget-package
-          subject-digest: sha256:${{ steps.upload.outputs.artifact-digest }}
+          subject-path: |
+            ./artifacts/*.nupkg
+            ./artifacts/*.snupkg
