@@ -6,7 +6,7 @@ This project is closely based on [Xunit.Combinatorial](https://github.com/AArnot
 
 ## Why pairwise?
 
-Research shows most software defects are triggered by interactions between at most two parameters. Pairwise testing exploits this by covering all two-way interactions with significantly fewer test cases:
+[Research](https://csrc.nist.gov/projects/automated-combinatorial-testing-for-software) shows most software defects are triggered by interactions between at most two parameters. Pairwise testing exploits this by covering all two-way interactions with significantly fewer test cases:
 
 | Parameters | Values each | Cartesian product | Pairwise |
 |------------|-------------|-------------------|----------|
