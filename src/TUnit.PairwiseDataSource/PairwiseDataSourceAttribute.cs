@@ -249,6 +249,13 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
         throw new ArgumentNullException($"No MatrixAttribute found for parameter '{sourceGeneratedParameterInformation.Name}' and the parameter type '{resolvedType.Name}' cannot be auto-generated. Only bool and enum types support auto-generation.");
     }
 
+    /// <summary>
+    /// Returns the defined enum values converted to the enum's underlying integral type.
+    /// </summary>
+    /// <remarks>
+    /// Uses <see cref="Enum.GetValuesAsUnderlyingType(Type)"/> where available and falls back
+    /// to converting the values from <see cref="Enum.GetValues(Type)"/> on .NET Standard 2.0.
+    /// </remarks>
     private static IEnumerable<object?> GetEnumValuesAsUnderlyingType(Type resolvedType)
     {
 #if NET5_0_OR_GREATER
