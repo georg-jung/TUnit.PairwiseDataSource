@@ -230,8 +230,7 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
 
         if (resolvedType.IsEnum)
         {
-            var enumValues = Enum.GetValuesAsUnderlyingType(resolvedType)
-                                 .Cast<object?>();
+            var enumValues = GetEnumValuesAsUnderlyingType(resolvedType);
 
             if (isNullable)
             {
@@ -243,11 +242,31 @@ public sealed class PairwiseDataSourceAttribute : UntypedDataSourceGeneratorAttr
             }
 
             return enumValues
-               .Except(matrixAttribute?.Excluding?.Select(e => Convert.ChangeType(e, Enum.GetUnderlyingType(resolvedType))) ?? [])
+                .Except(matrixAttribute?.Excluding?.Select(e => Convert.ChangeType(e, Enum.GetUnderlyingType(resolvedType))) ?? [])
                 .ToArray();
         }
 
         throw new ArgumentNullException($"No MatrixAttribute found for parameter '{sourceGeneratedParameterInformation.Name}' and the parameter type '{resolvedType.Name}' cannot be auto-generated. Only bool and enum types support auto-generation.");
+    }
+
+    /// <summary>
+    /// Returns the defined enum values converted to the enum's underlying integral type.
+    /// </summary>
+    /// <remarks>
+    /// Uses <see cref="Enum.GetValuesAsUnderlyingType(Type)"/> where available and falls back
+    /// to converting the values from <see cref="Enum.GetValues(Type)"/> on .NET Standard 2.0.
+    /// </remarks>
+    private static IEnumerable<object?> GetEnumValuesAsUnderlyingType(Type resolvedType)
+    {
+#if NET7_0_OR_GREATER
+        return Enum.GetValuesAsUnderlyingType(resolvedType).Cast<object?>();
+#else
+        // see also https://github.com/SimonCropp/Polyfill/blob/18243e7e051c347acf023978bd18abd181ea6695/src/Polyfill/EnumPolyfill.cs#L51
+        var underlyingType = Enum.GetUnderlyingType(resolvedType);
+        return Enum.GetValues(resolvedType)
+            .Cast<object>()
+            .Select(value => Convert.ChangeType(value, underlyingType));
+#endif
     }
 
     private static readonly IEnumerable<IEnumerable<object?>> Seed = [[]];
