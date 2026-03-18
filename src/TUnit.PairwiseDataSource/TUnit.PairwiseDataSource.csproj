@@ -4,6 +4,15 @@
     <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks> <!-- https://tunit.dev/docs/extending/libraries/ -->
     <Description>Pairwise (all-pairs) test data source for TUnit. Generates test cases covering all pairwise parameter combinations with significantly fewer tests than full Cartesian product.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <IsAotCompatible
+        Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
+
+    <!-- Suppress AD0001 analyzer crash in .NET 9 ILLink DynamicallyAccessedMembersAnalyzer.
+         This is a known .NET 9 SDK analyzer bug, not a code issue.
+         See: https://github.com/dotnet/runtime/issues/109352
+              https://github.com/dotnet/runtime/issues/120728 -->
+    <NoWarn Condition="'$(TargetFramework)' == 'net9.0'">$(NoWarn);AD0001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
