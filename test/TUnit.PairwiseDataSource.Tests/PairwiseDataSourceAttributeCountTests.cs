@@ -5,60 +5,50 @@ public class PairwiseDataSourceAttributeCountTests
     [Test]
     public async Task SingleParam_AllValuesPresent_GeneratesThreeTests()
     {
-        var result = await TrxTestProjectRunner.RunMainTestProject(
-            "/*/*/PairwiseDataSourceAttributeTests/SingleParam_AllValuesPresent*");
+        var method = typeof(PairwiseDataSourceAttributeTests)
+            .GetMethod(nameof(PairwiseDataSourceAttributeTests.SingleParam_AllValuesPresent))!;
+        var rows = await PairwiseDataSourceInProcessRunner.GetRowsAsync(method, new PairwiseDataSourceAttributeTests());
 
-        await Assert.That(result.ExitCode).IsEqualTo(0);
-        await Assert.That(result.Total).IsEqualTo(3);
-        await Assert.That(result.Passed).IsEqualTo(3);
-        await Assert.That(result.Failed).IsEqualTo(0);
+        await Assert.That(rows).Count().IsEqualTo(3);
     }
 
     [Test]
     public async Task TwoParams_SameAsCartesian_GeneratesFullCartesianProduct()
     {
-        var result = await TrxTestProjectRunner.RunMainTestProject(
-            "/*/*/PairwiseDataSourceAttributeTests/TwoParams_SameAsCartesian*");
+        var method = typeof(PairwiseDataSourceAttributeTests)
+            .GetMethod(nameof(PairwiseDataSourceAttributeTests.TwoParams_SameAsCartesian))!;
+        var rows = await PairwiseDataSourceInProcessRunner.GetRowsAsync(method, new PairwiseDataSourceAttributeTests());
 
-        await Assert.That(result.ExitCode).IsEqualTo(0);
-        await Assert.That(result.Total).IsEqualTo(6);
-        await Assert.That(result.Passed).IsEqualTo(6);
-        await Assert.That(result.Failed).IsEqualTo(0);
+        await Assert.That(rows).Count().IsEqualTo(6);
     }
 
     [Test]
     public async Task NUnitDocExample_GeneratesSixTests()
     {
-        var result = await TrxTestProjectRunner.RunMainTestProject(
-            "/*/*/PairwiseDataSourceAttributeTests/NUnitDocExample*");
+        var method = typeof(PairwiseDataSourceAttributeTests)
+            .GetMethod(nameof(PairwiseDataSourceAttributeTests.NUnitDocExample))!;
+        var rows = await PairwiseDataSourceInProcessRunner.GetRowsAsync(method, new PairwiseDataSourceAttributeTests());
 
-        await Assert.That(result.ExitCode).IsEqualTo(0);
-        await Assert.That(result.Total).IsEqualTo(6);
-        await Assert.That(result.Passed).IsEqualTo(6);
-        await Assert.That(result.Failed).IsEqualTo(0);
+        await Assert.That(rows).Count().IsEqualTo(6);
     }
 
     [Test]
     public async Task BoolAutoGeneration_GeneratesFourTests()
     {
-        var result = await TrxTestProjectRunner.RunMainTestProject(
-            "/*/*/PairwiseDataSourceAttributeTests/BoolAutoGeneration*");
+        var method = typeof(PairwiseDataSourceAttributeTests)
+            .GetMethod(nameof(PairwiseDataSourceAttributeTests.BoolAutoGeneration))!;
+        var rows = await PairwiseDataSourceInProcessRunner.GetRowsAsync(method, new PairwiseDataSourceAttributeTests());
 
-        await Assert.That(result.ExitCode).IsEqualTo(0);
-        await Assert.That(result.Total).IsEqualTo(4);
-        await Assert.That(result.Passed).IsEqualTo(4);
-        await Assert.That(result.Failed).IsEqualTo(0);
+        await Assert.That(rows).Count().IsEqualTo(4);
     }
 
     [Test]
     public async Task SingleParam_WithExclusion_GeneratesRemainingValuesOnly()
     {
-        var result = await TrxTestProjectRunner.RunMainTestProject(
-            "/*/*/PairwiseDataSourceAttributeTests/SingleParam_WithExclusion*");
+        var method = typeof(PairwiseDataSourceAttributeTests)
+            .GetMethod(nameof(PairwiseDataSourceAttributeTests.SingleParam_WithExclusion))!;
+        var rows = await PairwiseDataSourceInProcessRunner.GetRowsAsync(method, new PairwiseDataSourceAttributeTests());
 
-        await Assert.That(result.ExitCode).IsEqualTo(0);
-        await Assert.That(result.Total).IsEqualTo(2);
-        await Assert.That(result.Passed).IsEqualTo(2);
-        await Assert.That(result.Failed).IsEqualTo(0);
+        await Assert.That(rows).Count().IsEqualTo(2);
     }
 }

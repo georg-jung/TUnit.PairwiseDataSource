@@ -17,8 +17,6 @@
     <ProjectReference Include="../../src/TUnit.PairwiseDataSource.Analyzers/TUnit.PairwiseDataSource.Analyzers.csproj"
                       ReferenceOutputAssembly="false"
                       OutputItemType="Analyzer" />
-    <ProjectReference Include="../TUnit.PairwiseDataSource.FailureScenarios/TUnit.PairwiseDataSource.FailureScenarios.csproj"
-                      ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>
