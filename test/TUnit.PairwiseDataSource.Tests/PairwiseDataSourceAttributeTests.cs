@@ -96,4 +96,86 @@ public class PairwiseDataSourceAttributeTests
         await Assert.That([100, 200, 300]).Contains(c);
         await Assert.That([1000, 2000, 3000]).Contains(d);
     }
+
+    [Test]
+    [PairwiseDataSource]
+    public async Task NullableBool_AutoGeneratesWithNull(bool? a, bool? b, bool? c)
+    {
+        // Nullable bools should produce [true, false, null]
+        await Assert.That(new bool?[] { true, false, null }).Contains(a);
+        await Assert.That(new bool?[] { true, false, null }).Contains(b);
+        await Assert.That(new bool?[] { true, false, null }).Contains(c);
+    }
+
+    [Test]
+    [PairwiseDataSource]
+    public async Task NullableEnum_AutoGeneratesWithNull(Color? color, bool flag)
+    {
+        // Nullable enum should include null as a possible value
+        if (color is not null)
+        {
+            await Assert.That(Enum.IsDefined(color.Value)).IsTrue();
+        }
+    }
+
+    [Test]
+    [PairwiseDataSource]
+    public async Task MatrixExcluding_FiltersValues(
+        [Matrix(1, 2, 3, Excluding = new object[] { 3 })] int a,
+        [Matrix(10, 20)] int b)
+    {
+        // Value 3 should never appear for parameter a
+        await Assert.That(a).IsNotEqualTo(3);
+        await Assert.That([1, 2]).Contains(a);
+        await Assert.That([10, 20]).Contains(b);
+    }
+
+    [Test]
+    [PairwiseDataSource]
+    public async Task EnumAutoGeneration_WithExcluding(
+        [Matrix(Excluding = new object[] { Color.Blue })] Color color,
+        bool flag)
+    {
+        // Blue should be excluded from the auto-generated enum values
+        await Assert.That(color).IsNotEqualTo(Color.Blue);
+        await Assert.That(color is Color.Red or Color.Green).IsTrue();
+    }
+
+    [Test]
+    [PairwiseDataSource]
+    [MatrixExclusion("wrong", "number", "of", "args")]
+    public async Task ExclusionLengthMismatch_IsIgnored(
+        [Matrix("a", "b")] string a,
+        [Matrix("x", "y")] string b)
+    {
+        // Exclusion has 4 elements but test has 2 params — should be silently ignored
+        await Assert.That(["a", "b"]).Contains(a);
+        await Assert.That(["x", "y"]).Contains(b);
+    }
+
+    [Test]
+    [PairwiseDataSource]
+    [MatrixExclusion(1)]
+    public async Task SingleParam_WithExclusion([Matrix(1, 2, 3)] int x)
+    {
+        // Single param uses the Cartesian fallback path; exclusion should still work
+        await Assert.That(x).IsNotEqualTo(1);
+        await Assert.That([2, 3]).Contains(x);
+    }
+
+    [Test]
+    [PairwiseDataSource]
+    [MatrixExclusion("a", "+", "x")]
+    [MatrixExclusion("b", "-", "y")]
+    public async Task MultipleExclusions(
+        [Matrix("a", "b", "c")] string a,
+        [Matrix("+", "-")] string b,
+        [Matrix("x", "y")] string c)
+    {
+        // Both excluded combinations should be absent
+        var isExcluded1 = a == "a" && b == "+" && c == "x";
+        var isExcluded2 = a == "b" && b == "-" && c == "y";
+        await Assert.That(isExcluded1).IsFalse();
+        await Assert.That(isExcluded2).IsFalse();
+    }
 }
