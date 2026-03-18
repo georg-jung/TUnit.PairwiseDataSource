@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks> <!-- https://tunit.dev/docs/extending/libraries/ -->
-    <Description>Pairwise (all-pairs) test data source for TUnit. Generates test cases covering all pairwise parameter combinations with significantly fewer tests than full Cartesian product.</Description>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-
     <IsAotCompatible
         Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
 
@@ -13,6 +10,21 @@
          See: https://github.com/dotnet/runtime/issues/109352
               https://github.com/dotnet/runtime/issues/120728 -->
     <NoWarn Condition="'$(TargetFramework)' == 'net9.0'">$(NoWarn);AD0001</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>GeorgJung.TUnit.PairwiseDataSource</PackageId>
+    <Authors>Georg Jung</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <PackageTags>tunit;pairwise;all-pairs;test-data-source;test-case-generation;testing;combinatorial;matrix;unit-test</PackageTags>
+    <PackageProjectUrl>https://github.com/georg-jung/TUnit.PairwiseDataSource</PackageProjectUrl>
+    <Description>Pairwise (all-pairs) test data source for TUnit. Generates test cases covering all pairwise parameter combinations with significantly fewer tests than full Cartesian product.</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <!-- Enable as soon as published <PackageValidationBaselineVersion>0.1.1-beta</PackageValidationBaselineVersion> -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,6 +52,7 @@
   <ItemGroup>
     <None Include="$(MSBuildProjectDirectory)/../../README.md" Pack="true" PackagePath="/" />
     <None Include="$(MSBuildProjectDirectory)/../../ThirdPartyNotices.txt" Pack="true" PackagePath="/" />
+    <None Include="$(MSBuildProjectDirectory)/../../icon-nuget.png" Pack="true" PackagePath="/icon.png" />
   </ItemGroup>
 
 </Project>
