@@ -20,6 +20,9 @@ namespace TUnit.PairwiseDataSource.Analyzers;
 /// <para>
 /// Users of this library should suppress TUnit0049 (<c>&lt;NoWarn&gt;TUnit0049&lt;/NoWarn&gt;</c>)
 /// and rely on this analyzer (PWTUNIT001) as a replacement that understands both attributes.
+/// A <c>DiagnosticSuppressor</c> is not a viable alternative because Roslyn only allows
+/// suppressors for diagnostics that are not errors by default, and TUnit0049 has
+/// default severity <c>Error</c>.
 /// </para>
 /// </remarks>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]

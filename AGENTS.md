@@ -20,7 +20,7 @@ The test runner is Microsoft.Testing.Platform (configured in `global.json`), not
   - `PairwiseStrategy.cs` — The pairwise algorithm (internal). Ported from Xunit.Combinatorial / NUnit (Charlie Poole / Andrew Arnott). Deterministic (fixed seed PRNG).
 - **`src/TUnit.PairwiseDataSource.Analyzers/`** — Roslyn analyzer (ships with the NuGet package).
   - `MatrixWithoutDataSourceAnalyzer.cs` — Emits `PWTUNIT001` when `[Matrix]` is used but neither `[MatrixDataSource]` nor `[PairwiseDataSource]` is present. Replaces TUnit's `TUnit0049` which doesn't know about `[PairwiseDataSource]`. Targets `netstandard2.0` (required for Roslyn analyzers).
-  - Note: TUnit0049 is emitted by TUnit's **source generator**, not its analyzer, so a `DiagnosticSuppressor` cannot suppress it (Roslyn limitation). The `<NoWarn>TUnit0049</NoWarn>` + PWTUNIT001 approach is the only viable solution.
+  - Note: TUnit0049 is emitted by TUnit's analyzer and has default severity `Error`, so a `DiagnosticSuppressor` still cannot suppress it (Roslyn only supports suppressing non-error diagnostics). The `<NoWarn>TUnit0049</NoWarn>` + PWTUNIT001 approach is the viable solution.
 - **`test/TUnit.PairwiseDataSource.Tests/`** — Tests using TUnit.
   - `PairwiseStrategyTests.cs` — Unit tests for the algorithm: pair coverage, determinism, edge cases.
   - `PairwiseDataSourceAttributeTests.cs` — Integration tests exercising the attribute end-to-end.

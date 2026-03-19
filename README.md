@@ -112,7 +112,7 @@ public async Task MyTest(
 
 ## Analyzer: TUnit0049 and PWTUNIT001
 
-TUnit's built-in source generator emits `TUnit0049` when `[Matrix]` is used without `[MatrixDataSource]`. It doesn't know about `[PairwiseDataSource]`, so you need to suppress it in projects that use pairwise tests:
+TUnit's built-in analyzer emits `TUnit0049` when `[Matrix]` is used without `[MatrixDataSource]`. It doesn't know about `[PairwiseDataSource]`, so you need to suppress it in projects that use pairwise tests:
 
 ```xml
 <PropertyGroup>
@@ -120,7 +120,7 @@ TUnit's built-in source generator emits `TUnit0049` when `[Matrix]` is used with
 </PropertyGroup>
 ```
 
-This package ships a **replacement analyzer** (`PWTUNIT001`) that provides equivalent protection: it errors when `[Matrix]` is used on parameters but neither `[MatrixDataSource]` nor `[PairwiseDataSource]` is present. So after suppressing TUnit0049, you still get a build error if you forget the data source attribute.
+This package ships a **replacement analyzer** (`PWTUNIT001`) that provides equivalent protection: it errors when `[Matrix]` is used on parameters but neither `[MatrixDataSource]` nor `[PairwiseDataSource]` is present. So after suppressing `TUnit0049`, you still get a build error if you forget the data source attribute.
 
 ## Algorithm
 
