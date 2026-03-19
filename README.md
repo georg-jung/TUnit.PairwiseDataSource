@@ -112,15 +112,25 @@ public async Task MyTest(
 
 ## Analyzer: TUnit0049 and PWTUNIT001
 
-TUnit's built-in analyzer emits `TUnit0049` when `[Matrix]` is used without `[MatrixDataSource]`. It doesn't know about `[PairwiseDataSource]`, so you need to suppress it in projects that use pairwise tests:
+TUnit's built-in analyzer emits `TUnit0049` when `[Matrix]` is used without `[MatrixDataSource]`. It doesn't know about `[PairwiseDataSource]`, so this package suppresses `TUnit0049` automatically for NuGet consumers via its shipped build props.
+
+This package ships a **replacement analyzer** (`PWTUNIT001`) that provides equivalent protection: it errors when `[Matrix]` is used on parameters but neither `[MatrixDataSource]` nor `[PairwiseDataSource]` is present. So after suppressing `TUnit0049`, you still get a build error if you forget the data source attribute.
+
+### Advanced package options
+
+The package also exposes two optional MSBuild properties for consuming projects. Both are enabled by default, so you only need to set them if you want to opt out:
 
 ```xml
 <PropertyGroup>
-  <NoWarn>$(NoWarn);TUnit0049</NoWarn>
+  <TUnitPairwiseDataSourceImplicitUsings>false</TUnitPairwiseDataSourceImplicitUsings>
+  <TUnitPairwiseDataSourceSuppressTUnit0049>false</TUnitPairwiseDataSourceSuppressTUnit0049>
 </PropertyGroup>
 ```
 
-This package ships a **replacement analyzer** (`PWTUNIT001`) that provides equivalent protection: it errors when `[Matrix]` is used on parameters but neither `[MatrixDataSource]` nor `[PairwiseDataSource]` is present. So after suppressing `TUnit0049`, you still get a build error if you forget the data source attribute.
+- `TUnitPairwiseDataSourceImplicitUsings`
+  Adds the implicit `using TUnit.PairwiseDataSource;` for you. Set it to `false` if you prefer explicit `using` statements.
+- `TUnitPairwiseDataSourceSuppressTUnit0049`
+  Suppresses TUnit's `TUnit0049` analyzer diagnostic automatically. Set it to `false` if you want to keep TUnit's original diagnostic visible.
 
 ## Algorithm
 

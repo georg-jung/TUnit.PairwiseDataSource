@@ -3,6 +3,7 @@
 
   <PropertyGroup>
     <TUnitPairwiseDataSourceImplicitUsings>true</TUnitPairwiseDataSourceImplicitUsings>
+    <TUnitPairwiseDataSourceSuppressTUnit0049>true</TUnitPairwiseDataSourceSuppressTUnit0049>
   </PropertyGroup>
   
 </Project>

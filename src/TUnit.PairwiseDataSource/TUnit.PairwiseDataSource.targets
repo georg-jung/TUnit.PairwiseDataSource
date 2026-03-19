@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
+  <PropertyGroup Condition="'$(TUnitPairwiseDataSourceSuppressTUnit0049)' == 'true'">
+    <NoWarn>$(NoWarn);TUnit0049</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TUnitPairwiseDataSourceImplicitUsings)' == 'true'">
     <Using Include="TUnit.PairwiseDataSource" />
   </ItemGroup>

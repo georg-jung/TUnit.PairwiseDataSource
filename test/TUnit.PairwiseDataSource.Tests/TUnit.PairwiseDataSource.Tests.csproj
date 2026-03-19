@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <!-- TUnit0049 doesn't know about [PairwiseDataSource], and it cannot be programmatically
-         suppressed because it is error-by-default. PWTUNIT001 replaces it. -->
+    <!-- The packaged build props are not imported for ProjectReference-based tests, so this
+         repo still suppresses TUnit0049 locally. PWTUNIT001 replaces it. -->
     <NoWarn>$(NoWarn);TUnit0049</NoWarn>
   </PropertyGroup>
 
