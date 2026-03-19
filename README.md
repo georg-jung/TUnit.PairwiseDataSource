@@ -112,6 +112,38 @@ public async Task MyTest(
 }
 ```
 
+### Automated Migration with Code Fixers
+
+Similar to [TUnit's automated xUnit migration](https://tunit.dev/docs/migration/xunit/#automated-migration-with-code-fixers), this package includes Roslyn analyzers and code fixers that can automatically migrate your Xunit.Combinatorial code to TUnit.PairwiseDataSource.
+
+**What gets converted automatically:**
+- `[Theory, PairwiseData]` → `[Test, PairwiseDataSource]`
+- `[Theory, CombinatorialData]` → `[Test, MatrixDataSource]`
+- `[CombinatorialValues(...)]` → `[Matrix(...)]`
+- `[CombinatorialRange(start, count)]` → `[MatrixRange<T>(start, count)]`
+- `[CombinatorialMemberData(nameof(Method))]` → `[MethodDataSource(nameof(Method))]`
+- Test methods converted to `async Task`
+- `using Xunit;` statements updated to TUnit usings
+
+**How to use the code fixer:**
+
+1. Install TUnit.PairwiseDataSource package (alongside Xunit.Combinatorial temporarily)
+2. Build your project to load the analyzers
+3. Run the automated code fixer:
+
+```bash
+dotnet format analyzers --severity info --diagnostics PWTUNIT002
+```
+
+4. Review the changes and remove the Xunit.Combinatorial package
+
+**Note:** The diagnostic `PWTUNIT002` is informational-level (not an error), so it won't appear in standard build output. The code fixer handles approximately 80-90% of typical Xunit.Combinatorial usage automatically.
+
+**What requires manual adjustment:**
+- `[CombinatorialRandomData]` - No direct TUnit equivalent, needs manual conversion
+- Complex parameter expressions that can't be automatically analyzed
+- Custom data source implementations
+
 ## Analyzer: TUnit0049 and PWTUNIT001
 
 TUnit's built-in analyzer emits `TUnit0049` when `[Matrix]` is used without `[MatrixDataSource]`. It doesn't know about `[PairwiseDataSource]`, so this package suppresses `TUnit0049` automatically for NuGet consumers via its shipped build props.
