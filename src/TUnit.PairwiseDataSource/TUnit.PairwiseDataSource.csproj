@@ -56,23 +56,29 @@
   </ItemGroup>
 
   <!-- Include props and targets in NuGet package, which enable implicit usings for the library -->
+  <!-- https://github.com/thomhurst/TUnit/blob/50511fbca6f66b2e275ab0258ef31f1c25c4be8d/Directory.Build.props#L24 -->
+  <PropertyGroup>
+    <BuildTransitivePath>buildTransitive/$(TargetFramework)/</BuildTransitivePath>
+    <BuildPath>build/netstandard2.0</BuildPath>
+  </PropertyGroup>
+
   <ItemGroup>
-    <TfmSpecificPackageFile Include="TUnit.PairwiseDataSource.props">
+    <TfmSpecificPackageFile Include="GeorgJung.TUnit.PairwiseDataSource.props">
       <Pack>true</Pack>
       <PackagePath>$(BuildTransitivePath)</PackagePath>
     </TfmSpecificPackageFile>
 
-    <None Include="TUnit.PairwiseDataSource.props">
+    <None Include="GeorgJung.TUnit.PairwiseDataSource.props">
       <Pack>true</Pack>
       <PackagePath>$(BuildPath)</PackagePath>
     </None>
 
-    <TfmSpecificPackageFile Include="TUnit.PairwiseDataSource.targets">
+    <TfmSpecificPackageFile Include="GeorgJung.TUnit.PairwiseDataSource.targets">
       <Pack>true</Pack>
       <PackagePath>$(BuildTransitivePath)</PackagePath>
     </TfmSpecificPackageFile>
 
-    <None Include="TUnit.PairwiseDataSource.targets">
+    <None Include="GeorgJung.TUnit.PairwiseDataSource.targets">
       <Pack>true</Pack>
       <PackagePath>$(BuildPath)</PackagePath>
     </None>
