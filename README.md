@@ -20,7 +20,7 @@ This project is closely based on [Xunit.Combinatorial](https://github.com/AArnot
 ## Installation
 
 ```shell
-dotnet add package TUnit.PairwiseDataSource
+dotnet add package GerogJung.TUnit.PairwiseDataSource
 ```
 
 ## Usage
