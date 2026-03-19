@@ -24,7 +24,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <EnablePackageValidation>true</EnablePackageValidation>
-    <!-- Enable as soon as published <PackageValidationBaselineVersion>0.1.1-beta</PackageValidationBaselineVersion> -->
+    <PackageValidationBaselineVersion>0.1.28</PackageValidationBaselineVersion>
   </PropertyGroup>
 
   <ItemGroup>
