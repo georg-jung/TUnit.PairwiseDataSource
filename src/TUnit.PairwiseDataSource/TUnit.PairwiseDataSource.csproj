@@ -55,4 +55,27 @@
     <None Include="$(MSBuildProjectDirectory)/../../icon-nuget.png" Pack="true" PackagePath="/icon.png" />
   </ItemGroup>
 
+  <!-- Include props and targets in NuGet package, which enable implicit usings for the library -->
+  <ItemGroup>
+    <TfmSpecificPackageFile Include="TUnit.PairwiseDataSource.props">
+      <Pack>true</Pack>
+      <PackagePath>$(BuildTransitivePath)</PackagePath>
+    </TfmSpecificPackageFile>
+
+    <None Include="TUnit.PairwiseDataSource.props">
+      <Pack>true</Pack>
+      <PackagePath>$(BuildPath)</PackagePath>
+    </None>
+
+    <TfmSpecificPackageFile Include="TUnit.PairwiseDataSource.targets">
+      <Pack>true</Pack>
+      <PackagePath>$(BuildTransitivePath)</PackagePath>
+    </TfmSpecificPackageFile>
+
+    <None Include="TUnit.PairwiseDataSource.targets">
+      <Pack>true</Pack>
+      <PackagePath>$(BuildPath)</PackagePath>
+    </None>
+  </ItemGroup>
+
 </Project>
