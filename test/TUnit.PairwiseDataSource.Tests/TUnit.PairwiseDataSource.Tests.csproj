@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="TUnit" />
-    <PackageReference Include="GitHubActionsTestLogger" />
   </ItemGroup>
 
   <ItemGroup>
