@@ -8,7 +8,7 @@ updates:
   groups:
     all:
       patterns:
-        - ".*"
+        - "*"
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
@@ -16,7 +16,7 @@ updates:
   groups:
     all:
       patterns:
-        - ".*"
+        - "*"
 - package-ecosystem: "devcontainers"
   directory: "/"
   schedule:
