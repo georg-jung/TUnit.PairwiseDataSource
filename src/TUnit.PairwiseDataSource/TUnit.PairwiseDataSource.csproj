@@ -35,15 +35,22 @@
     <ProjectReference Include="../TUnit.PairwiseDataSource.Analyzers/TUnit.PairwiseDataSource.Analyzers.csproj"
                       ReferenceOutputAssembly="false"
                       OutputItemType="Analyzer" />
+    <ProjectReference Include="../TUnit.PairwiseDataSource.Analyzers.CodeFixers/TUnit.PairwiseDataSource.Analyzers.CodeFixers.csproj"
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer" />
   </ItemGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="TUnit.PairwiseDataSource.Tests" />
   </ItemGroup>
 
-  <!-- Include analyzer in NuGet package -->
+  <!-- Include analyzer and code fixers in NuGet package -->
   <ItemGroup>
     <None Include="$(MSBuildProjectDirectory)/../TUnit.PairwiseDataSource.Analyzers/bin/$(Configuration)/netstandard2.0/TUnit.PairwiseDataSource.Analyzers.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+    <None Include="$(MSBuildProjectDirectory)/../TUnit.PairwiseDataSource.Analyzers.CodeFixers/bin/$(Configuration)/netstandard2.0/TUnit.PairwiseDataSource.Analyzers.CodeFixers.dll"
           Pack="true"
           PackagePath="analyzers/dotnet/cs"
           Visible="false" />
