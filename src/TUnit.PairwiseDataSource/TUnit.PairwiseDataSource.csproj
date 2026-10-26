@@ -19,43 +19,20 @@
 
     <PackageTags>tunit;pairwise;all-pairs;test-data-source;test-case-generation;testing;combinatorial;matrix;unit-test</PackageTags>
     <PackageProjectUrl>https://github.com/georg-jung/TUnit.PairwiseDataSource</PackageProjectUrl>
-    <Description>Pairwise (all-pairs) test data source for TUnit. Generates test cases covering all pairwise parameter combinations with significantly fewer tests than full Cartesian product.</Description>
+    <Description>Deprecated: TUnit 1.73.0+ includes [PairwiseDataSource] built in. This final version only hands existing [PairwiseDataSource] usages over to TUnit's built-in attribute; remove the package reference to finish migrating.</Description>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 
+    <!-- No baseline version: this final release intentionally removes the public API in favor of TUnit's built-in attribute. -->
     <EnablePackageValidation>true</EnablePackageValidation>
-    <PackageValidationBaselineVersion>0.1.28</PackageValidationBaselineVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TUnit.Core" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../TUnit.PairwiseDataSource.Analyzers/TUnit.PairwiseDataSource.Analyzers.csproj"
-                      ReferenceOutputAssembly="false"
-                      OutputItemType="Analyzer" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <InternalsVisibleTo Include="TUnit.PairwiseDataSource.Tests" />
-  </ItemGroup>
-
-  <!-- Include analyzer in NuGet package -->
-  <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)/../TUnit.PairwiseDataSource.Analyzers/bin/$(Configuration)/netstandard2.0/TUnit.PairwiseDataSource.Analyzers.dll"
-          Pack="true"
-          PackagePath="analyzers/dotnet/cs"
-          Visible="false" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="$(MSBuildProjectDirectory)/../../README.md" Pack="true" PackagePath="/" />
-    <None Include="$(MSBuildProjectDirectory)/../../ThirdPartyNotices.txt" Pack="true" PackagePath="/" />
     <None Include="$(MSBuildProjectDirectory)/../../icon-nuget.png" Pack="true" PackagePath="/icon.png" />
   </ItemGroup>
 
-  <!-- Include props and targets in NuGet package, which enable implicit usings for the library -->
+  <!-- Include targets in NuGet package, which emit the deprecation warning and check the TUnit version -->
   <!-- https://github.com/thomhurst/TUnit/blob/50511fbca6f66b2e275ab0258ef31f1c25c4be8d/Directory.Build.props#L24 -->
   <PropertyGroup>
     <BuildTransitivePath>buildTransitive/$(TargetFramework)/</BuildTransitivePath>
@@ -63,16 +40,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <TfmSpecificPackageFile Include="GeorgJung.TUnit.PairwiseDataSource.props">
-      <Pack>true</Pack>
-      <PackagePath>$(BuildTransitivePath)</PackagePath>
-    </TfmSpecificPackageFile>
-
-    <None Include="GeorgJung.TUnit.PairwiseDataSource.props">
-      <Pack>true</Pack>
-      <PackagePath>$(BuildPath)</PackagePath>
-    </None>
-
     <TfmSpecificPackageFile Include="GeorgJung.TUnit.PairwiseDataSource.targets">
       <Pack>true</Pack>
       <PackagePath>$(BuildTransitivePath)</PackagePath>

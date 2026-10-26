@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <PropertyGroup Condition="'$(TUnitPairwiseDataSourceSuppressTUnit0049)' == 'true'">
-    <NoWarn>$(NoWarn);TUnit0049</NoWarn>
-  </PropertyGroup>
+  <!-- TUnit 1.73.0+ ships [PairwiseDataSource] in TUnit.Core, so this package is no longer needed.
+       It deliberately has no TUnit.Core dependency: raising TUnit.Core alone would mix TUnit package
+       versions, which builds fine but discovers no tests. Older TUnit versions fail with PWTUNIT003 instead. -->
+  <Target Name="_TUnitPairwiseDataSourceDeprecation" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <_TUnitPairwiseDataSourceTUnitCore Include="@(ReferencePath)" Condition="'%(ReferencePath.NuGetPackageId)' == 'TUnit.Core'" />
+    </ItemGroup>
+    <PropertyGroup>
+      <_TUnitPairwiseDataSourceTUnitCoreVersion>@(_TUnitPairwiseDataSourceTUnitCore->'%(NuGetPackageVersion)'->Distinct())</_TUnitPairwiseDataSourceTUnitCoreVersion>
+    </PropertyGroup>
 
-  <ItemGroup Condition="'$(TUnitPairwiseDataSourceImplicitUsings)' == 'true'">
-    <Using Include="TUnit.PairwiseDataSource" />
-  </ItemGroup>
+    <Error Code="PWTUNIT003"
+           Condition="'$(_TUnitPairwiseDataSourceTUnitCoreVersion)' != '' and $([MSBuild]::VersionLessThan('$(_TUnitPairwiseDataSourceTUnitCoreVersion)', '1.73.0'))"
+           Text="GeorgJung.TUnit.PairwiseDataSource 0.2+ requires TUnit 1.73.0 or later, which includes [PairwiseDataSource] built in (found TUnit.Core $(_TUnitPairwiseDataSourceTUnitCoreVersion)). Update TUnit and remove this package, or stay on GeorgJung.TUnit.PairwiseDataSource 0.1.x. See https://github.com/georg-jung/TUnit.PairwiseDataSource#migrating-to-tunits-built-in-pairwisedatasource" />
+
+    <Warning Code="PWTUNIT002"
+             Text="GeorgJung.TUnit.PairwiseDataSource is deprecated: TUnit 1.73.0+ includes [PairwiseDataSource] built in, which your tests already use now. Remove this package reference and any 'using TUnit.PairwiseDataSource;' directives. See https://github.com/georg-jung/TUnit.PairwiseDataSource#migrating-to-tunits-built-in-pairwisedatasource" />
+  </Target>
 
 </Project>
