@@ -2,83 +2,45 @@
 
 [![NuGet version (GeorgJung.TUnit.PairwiseDataSource)](https://img.shields.io/nuget/v/GeorgJung.TUnit.PairwiseDataSource.svg?style=flat)](https://www.nuget.org/packages/GeorgJung.TUnit.PairwiseDataSource/)
 [![Build Status](https://github.com/georg-jung/TUnit.PairwiseDataSource/actions/workflows/ci.yml/badge.svg)](https://github.com/georg-jung/TUnit.PairwiseDataSource/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/georg-jung/TUnit.PairwiseDataSource/graph/badge.svg)](https://app.codecov.io/gh/georg-jung/TUnit.PairwiseDataSource)
 
-A [TUnit](https://tunit.dev) plugin that provides pairwise (all-pairs) test case generation. Instead of testing every possible combination of parameter values (Cartesian product), pairwise testing generates a smaller set of test cases that covers every pair of parameter values at least once.
+> **Deprecated:** [TUnit](https://tunit.dev) 1.73.0 and later include `[PairwiseDataSource]` built in. It uses the same pairwise algorithm from [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial), contributed to TUnit by Andrew Arnott. This package is no longer maintained. Please [migrate to the built-in attribute](#migrating-to-tunits-built-in-pairwisedatasource).
 
-This project is closely based on [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial) by Andrew Arnott. In particular, the harder parts of the pairwise generation logic are intentionally kept very close to that codebase rather than being a fresh reimplementation. That close ancestry is deliberate: one goal of this package is to make xUnit to TUnit migration easier, including preserving the same generated pairwise cases for equivalent inputs.
+This package added pairwise (all-pairs) test case generation to TUnit before TUnit had it: a `[PairwiseDataSource]` attribute that works like `[MatrixDataSource]`, but covers every pair of parameter values instead of every combination. See TUnit's [pairwise tests documentation](https://tunit.dev/docs/writing-tests/pairwise-tests) for the built-in version.
 
-## Why pairwise?
+## Migrating to TUnit's built-in `[PairwiseDataSource]`
 
-[Research](https://csrc.nist.gov/projects/automated-combinatorial-testing-for-software) shows most software defects are triggered by interactions between at most two parameters. Pairwise testing exploits this by covering all two-way interactions with significantly fewer test cases:
+1. Update TUnit to 1.73.0 or later.
+2. Remove the `GeorgJung.TUnit.PairwiseDataSource` package reference.
+3. Delete any `using TUnit.PairwiseDataSource;` directives. If you set them, also remove the `TUnitPairwiseDataSourceImplicitUsings` and `TUnitPairwiseDataSourceSuppressTUnit0049` MSBuild properties and any `PWTUNIT001` suppressions.
 
-| Parameters | Values each | Cartesian product | Pairwise |
-|------------|-------------|-------------------|----------|
-| 3          | 3           | 27                | 9        |
-| 4          | 3           | 81                | 9        |
-| 5          | 3           | 243               | 15       |
-| 3 bools    | 2           | 8                 | 4        |
+Your tests don't need any other changes: `[PairwiseDataSource]`, `[Matrix(...)]`, `[MatrixRange<T>(...)]`, `[MatrixMethod<T>(...)]`, `[MatrixExclusion(...)]` and the automatic `bool`/enum values all work the same with TUnit's attribute. TUnit's own `TUnit0049` analyzer now recognizes `[PairwiseDataSource]`, so this package's `PWTUNIT001` replacement is no longer needed.
 
-## Installation
+### What changes
 
-```shell
-dotnet add package GerogJung.TUnit.PairwiseDataSource
+- **Without `[MatrixExclusion]`:** TUnit generates exactly the same test cases as this package. Both use the same algorithm and default seed.
+- **With `[MatrixExclusion]`:** TUnit applies exclusions while it generates the test cases, instead of filtering them out afterwards as this package did. Every pair that can still occur is now covered, so these tests may get different (and sometimes more) test cases than before.
+- TUnit adds a `Seed` property (`[PairwiseDataSource(Seed = 42)]`) to pick a different, equally valid set of test cases.
+
+### Seeing error CS0104?
+
+```
+error CS0104: 'PairwiseDataSource' is an ambiguous reference between 'TUnit.Core.PairwiseDataSourceAttribute' and 'TUnit.PairwiseDataSource.PairwiseDataSourceAttribute'
 ```
 
-## Usage
+You are using version 0.1.x of this package with TUnit 1.73.0 or later. Follow the [migration steps](#migrating-to-tunits-built-in-pairwisedatasource) above, or update this package to 0.2.
 
-Use `[PairwiseDataSource]` in place of `[MatrixDataSource]` on your test methods. Parameter values are specified the same way, using `[Matrix(...)]` attributes:
+### The final 0.2 release
 
-```csharp
-using TUnit.PairwiseDataSource;
+Version 0.2 is a final release that only bridges the gap until you remove the package. It contains no pairwise implementation of its own. With it, your existing code compiles against TUnit 1.73.0+ unchanged, including `using TUnit.PairwiseDataSource;` directives, and `[PairwiseDataSource]` already uses TUnit's built-in attribute.
 
-[Test, PairwiseDataSource]
-public async Task MyTest(
-    [Matrix("a", "b", "c")] string first,
-    [Matrix("+", "-")] string op,
-    [Matrix("x", "y")] string second)
-{
-    // Generates 6 test cases covering all pairs, instead of 12 (3×2×2) combinations
-}
-```
-
-### Automatic value generation
-
-Just like `[MatrixDataSource]`, boolean and enum parameters don't need explicit `[Matrix(...)]` attributes:
-
-```csharp
-public enum Priority { Low, Medium, High }
-
-[Test, PairwiseDataSource]
-public async Task TestWithAutoValues(bool enabled, Priority priority)
-{
-    // Generates pairwise combinations of {true,false} × {Low,Medium,High}
-}
-```
-
-### Exclusions
-
-Use `[MatrixExclusion(...)]` to exclude specific combinations:
-
-```csharp
-[Test, PairwiseDataSource]
-[MatrixExclusion("a", "+", "x")]
-public async Task MyTest(
-    [Matrix("a", "b", "c")] string first,
-    [Matrix("+", "-")] string op,
-    [Matrix("x", "y")] string second)
-{
-    // The combination ("a", "+", "x") will never appear
-}
-```
+- It reports warning `PWTUNIT002` as a reminder to remove the package. To silence it, add `<NoWarn>$(NoWarn);PWTUNIT002</NoWarn>` to your project.
+- It fails with error `PWTUNIT003` if your TUnit version is older than 1.73.0. If you have to stay on an older TUnit, keep using version 0.1.x.
 
 ## Migrating from Xunit.Combinatorial
 
-If you're migrating from xUnit with [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial), the mapping is straightforward.
+This package was built to make migrating from xUnit with [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial) easy, generating the same pairwise test cases for equivalent inputs. TUnit's built-in attribute keeps that promise:
 
-That migration story is not accidental. This package is deliberately built on the same underlying approach, and the pairwise strategy was ported closely enough that equivalent inputs produce the same pair sets. In practice, that means moving from xUnit to TUnit does not also force you to absorb a silent change in generated test cases.
-
-| Xunit.Combinatorial | TUnit + PairwiseDataSource |
+| Xunit.Combinatorial | TUnit |
 | -------------------------------------- | ------------------------------------------- |
 | `[Theory, PairwiseData]` | `[Test, PairwiseDataSource]` |
 | `[Theory, CombinatorialData]` | `[Test, MatrixDataSource]` |
@@ -86,64 +48,12 @@ That migration story is not accidental. This package is deliberately built on th
 | `[CombinatorialRange(0, 5)]` | `[MatrixRange<int>(0, 5)]` |
 | Bool/enum auto-generation | Bool/enum auto-generation (same) |
 
-### Example migration
+## History
 
-**Before (xUnit):**
-
-```csharp
-[Theory, PairwiseData]
-public void MyTest(
-    [CombinatorialValues("a", "b", "c")] string x,
-    [CombinatorialValues("+", "-")] string y,
-    [CombinatorialValues("1", "2")] string z)
-{
-}
-```
-
-**After (TUnit):**
-
-```csharp
-[Test, PairwiseDataSource]
-public async Task MyTest(
-    [Matrix("a", "b", "c")] string x,
-    [Matrix("+", "-")] string y,
-    [Matrix("1", "2")] string z)
-{
-}
-```
-
-## Analyzer: TUnit0049 and PWTUNIT001
-
-TUnit's built-in analyzer emits `TUnit0049` when `[Matrix]` is used without `[MatrixDataSource]`. It doesn't know about `[PairwiseDataSource]`, so this package suppresses `TUnit0049` automatically for NuGet consumers via its shipped build props.
-
-This package ships a **replacement analyzer** (`PWTUNIT001`) that provides equivalent protection: it errors when `[Matrix]` is used on parameters but neither `[MatrixDataSource]` nor `[PairwiseDataSource]` is present. So after suppressing `TUnit0049`, you still get a build error if you forget the data source attribute.
-
-### Advanced package options
-
-The package also exposes two optional MSBuild properties for consuming projects. Both are enabled by default, so you only need to set them if you want to opt out:
-
-```xml
-<PropertyGroup>
-  <TUnitPairwiseDataSourceImplicitUsings>false</TUnitPairwiseDataSourceImplicitUsings>
-  <TUnitPairwiseDataSourceSuppressTUnit0049>false</TUnitPairwiseDataSourceSuppressTUnit0049>
-</PropertyGroup>
-```
-
-- `TUnitPairwiseDataSourceImplicitUsings`
-  Adds the implicit `using TUnit.PairwiseDataSource;` for you. Set it to `false` if you prefer explicit `using` statements.
-- `TUnitPairwiseDataSourceSuppressTUnit0049`
-  Suppresses TUnit's `TUnit0049` analyzer diagnostic automatically. Set it to `false` if you want to keep TUnit's original diagnostic visible.
-
-## Algorithm
-
-The pairwise test case generation algorithm in this repository is not merely inspired by [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial). [PairwiseStrategy.cs](src/TUnit.PairwiseDataSource/PairwiseStrategy.cs) is a close port of Andrew Arnott's implementation, preserving its behavior intentionally so that migrations can keep the exact same pairwise coverage.
-
-That implementation in Xunit.Combinatorial is itself derived from [Charlie Poole's NUnit implementation](https://github.com/nunit/nunit), originally based on Bob Jenkins' ["jenny" tool](http://burtleburtle.net/bob/math/jenny.html).
-
-Xunit.Combinatorial is an excellent project, and this package benefits directly from that work. The goal here is not to obscure that lineage, but to bring the same proven pairwise behavior into TUnit with an API that fits naturally alongside `[MatrixDataSource]`.
+The pairwise algorithm in versions 0.1.x was a close port of Andrew Arnott's implementation in [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial). That implementation is itself derived from [Charlie Poole's NUnit implementation](https://github.com/nunit/nunit), originally based on Bob Jenkins' ["jenny" tool](http://burtleburtle.net/bob/math/jenny.html). The 0.1.x source code is available at the [`v0.1.28` tag](https://github.com/georg-jung/TUnit.PairwiseDataSource/tree/v0.1.28).
 
 ## License
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
-The pairwise algorithm implementation (`PairwiseStrategy.cs`) is derived from [Xunit.Combinatorial](https://github.com/AArnott/Xunit.Combinatorial) by Andrew Arnott (itself based on Charlie Poole's NUnit implementation) and is licensed under the [Microsoft Public License (Ms-PL)](https://opensource.org/licenses/ms-pl). See [ThirdPartyNotices.txt](ThirdPartyNotices.txt) for the full license text.
+Versions 0.1.x also contained the pairwise algorithm derived from Xunit.Combinatorial, which is licensed under the [Microsoft Public License (Ms-PL)](https://opensource.org/licenses/ms-pl). Those versions include its license text in `ThirdPartyNotices.txt`.

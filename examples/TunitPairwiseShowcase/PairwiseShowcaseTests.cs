@@ -1,3 +1,7 @@
+// Not needed anymore: [PairwiseDataSource] is part of TUnit.Core since TUnit 1.73.0. Kept to show that
+// existing usings still compile with the final GeorgJung.TUnit.PairwiseDataSource release.
+using TUnit.PairwiseDataSource;
+
 namespace TunitPairwiseExample;
 
 /// <summary>
@@ -7,6 +11,12 @@ namespace TunitPairwiseExample;
 /// </summary>
 public class PairwiseShowcaseTests
 {
+    [Test]
+    public async Task PairwiseDataSource_IsTUnitsBuiltInAttribute()
+    {
+        await Assert.That(typeof(PairwiseDataSourceAttribute).Assembly.GetName().Name).IsEqualTo("TUnit.Core");
+    }
+
     public enum Color { Red, Green, Blue }
     public enum Size { Small, Medium, Large }
     public enum Shape { Circle, Square, Triangle }
